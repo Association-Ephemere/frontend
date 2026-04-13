@@ -13,7 +13,7 @@ flowchart LR
     frontend -->|GET /photos| jobsvc
     frontend -->|POST /jobs| jobsvc
     frontend -->|GET /jobs| jobsvc
-    frontend -->|GET /jobs/{id}/stream SSE| jobsvc
+    frontend -->|"GET /jobs/{id}/stream SSE"| jobsvc
     jobsvc -->|presigned URLs| minio
     minio -->|images| frontend
 ```
