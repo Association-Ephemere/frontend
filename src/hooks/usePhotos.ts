@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { api } from '../lib/axios'
+import { fetchPhotosCompat } from '../lib/axios'
 
 export const BATCH_SIZE = 20
 
@@ -14,10 +14,7 @@ export interface PhotosResponse {
 }
 
 export async function fetchPhotos(offset: number): Promise<PhotosResponse> {
-  const { data } = await api.get<PhotosResponse>('/photos', {
-    params: { limit: BATCH_SIZE, offset },
-  })
-  return data
+  return fetchPhotosCompat(offset, BATCH_SIZE)
 }
 
 export function useInfinitePhotos() {
