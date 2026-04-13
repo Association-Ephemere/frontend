@@ -1,0 +1,30 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { fetchPhotosCompat } from '../lib/axios'
+
+export const BATCH_SIZE = 20
+
+export interface Photo {
+  key: string
+  url: string
+}
+
+export interface PhotosResponse {
+  photos: Photo[]
+  total: number
+}
+
+export async function fetchPhotos(offset: number): Promise<PhotosResponse> {
+  return fetchPhotosCompat(offset, BATCH_SIZE)
+}
+
+export function useInfinitePhotos() {
+  return useInfiniteQuery({
+    queryKey: ['photos'],
+    queryFn: ({ pageParam = 0 }) => fetchPhotos(pageParam as number),
+    initialPageParam: 0 as number,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.flatMap(p => p.photos).length
+      return loaded < lastPage.total ? loaded : undefined
+    },
+  })
+}
