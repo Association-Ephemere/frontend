@@ -1,8 +1,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { useInfinitePhotos, fetchPhotos, type Photo } from '../hooks/usePhotos'
-
-import PhotoCard from '../components/PhotoCard'
 import { useTicket } from '../hooks/useTicket'
+import PhotoCard from '../components/PhotoCard'
+import PhotoModal from '../components/PhotoModal'
 
 function dedup(photos: Photo[]): Photo[] {
   const seen = new Set<string>()
@@ -17,14 +17,13 @@ export default function Gallery() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfinitePhotos()
   const { increment, decrement, getQty } = useTicket()
 
-  // All photos: polled top + infinite scroll pages
   const [topPhotos, setTopPhotos] = useState<Photo[]>([])
   const scrollPages = data?.pages.flatMap(p => p.photos) ?? []
-
-  // Merged and deduped list: top-polled first, then pages
   const allPhotos = dedup([...topPhotos, ...scrollPages])
 
-  // Polling: prepend new photos without scroll jump
+  // Modal state
+  const [modalIndex, setModalIndex] = useState<number | null>(null)
+
   useEffect(() => {
     const interval = setInterval(async () => {
       const fresh = await fetchPhotos(0)
@@ -37,6 +36,7 @@ export default function Gallery() {
     return () => clearInterval(interval)
   }, [allPhotos])
 
+  // const sentinelRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver | null>(null)
 
   const handleSentinel = useCallback(
@@ -66,37 +66,41 @@ export default function Gallery() {
   }
 
   if (status === 'error') {
-    return (
-      <main className="p-6 text-red-500">
-        Error. Cannot load photos. Try refreshing? If the problem persists, check the console for details.
-      </main>
-    )
+    return <main className="p-6 text-red-500">Ugh. Error loading photos. Caveman cry. 🦴</main>
   }
 
   return (
     <main className="p-6">
       <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
-        {allPhotos.map(photo => (
+        {allPhotos.map((photo, index) => (
           <PhotoCard
             key={photo.key}
             photo={photo}
             qty={getQty(photo.key)}
             onIncrement={() => increment(photo.key)}
             onDecrement={() => decrement(photo.key)}
-            onClick={() => {/* Issue #3: open preview modal */}}
+            onClick={() => setModalIndex(index)}
           />
         ))}
       </div>
 
-      {/* Infinite scroll sentinel */}
       <div ref={handleSentinel} className="h-10 mt-4 flex items-center justify-center">
         {isFetchingNextPage && (
           <span className="text-stone-400 text-sm animate-pulse">Loading more photos…</span>
         )}
         {!hasNextPage && allPhotos.length > 0 && (
-          <span className="text-stone-300 text-sm">All photos loaded.</span>
+          <span className="text-stone-300 text-sm">All photos loaded. Ugh. 🪨</span>
         )}
       </div>
+
+      {modalIndex !== null && (
+        <PhotoModal
+          photos={allPhotos}
+          currentIndex={modalIndex}
+          onClose={() => setModalIndex(null)}
+          onNavigate={setModalIndex}
+        />
+      )}
     </main>
   )
 }
