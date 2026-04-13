@@ -18,7 +18,7 @@ export { getEnv }
 
 // MOCK MODE — to test front-end indendently from backend
 
-export const USE_MOCK = import.meta.env.USE_MOCK === 'true'
+export const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
 export async function fetchPhotosCompat(
   offset: number,
