@@ -16,11 +16,8 @@ export function TicketProvider({
 }: Readonly<{ children: ReactNode }>) {
   const [ticket, setTicket] = useState<Ticket>({});
 
-  console.log({ ticket });
-
   function increment(key: string) {
     setTicket((t) => ({ ...t, [key]: (t[key] ?? 0) + 1 }));
-    console.log("increment", key);
   }
 
   function decrement(key: string) {

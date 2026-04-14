@@ -1,9 +1,9 @@
+import { useSubmitJob } from "@/hooks/useSumbitJob";
 import { useTicket } from "../context/ticket/TicketProvider";
 import { type Photo } from "../hooks/usePhotos";
 
 interface Props {
   photos: Photo[];
-  onImprimer: () => void;
 }
 
 function filenameFromKey(key: string): string {
@@ -13,10 +13,10 @@ function filenameFromKey(key: string): string {
   return name.length > 24 ? name.slice(0, 21) + "…" : name;
 }
 
-export default function TicketSidebar({ photos, onImprimer }: Readonly<Props>) {
+export default function TicketSidebar({ photos }: Readonly<Props>) {
   const { ticket, clear } = useTicket();
+  const { submit, isPending } = useSubmitJob();
 
-  console.log("ticket", ticket);
   const selectedEntries = Object.entries(ticket).filter(([, qty]) => qty > 0);
   const photoMap = new Map(photos.map((p) => [p.key, p]));
 
@@ -89,11 +89,11 @@ export default function TicketSidebar({ photos, onImprimer }: Readonly<Props>) {
           Paramètres
         </button>
         <button
-          onClick={onImprimer}
-          disabled={isEmpty}
+          onClick={submit}
+          disabled={isEmpty || isPending}
           className="w-full py-2 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Imprimer
+          {isPending ? "Envoi…" : "Imprimer"}
         </button>
         <button
           onClick={clear}
