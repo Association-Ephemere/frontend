@@ -22,7 +22,6 @@ export function useSubmitJob() {
       }));
 
     if (photos.length === 0) return;
-
     setIsPending(true);
     try {
       const { data } = await api.post<JobResponse>("/jobs", { photos });

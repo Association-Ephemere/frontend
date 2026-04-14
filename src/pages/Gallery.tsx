@@ -109,12 +109,7 @@ export default function Gallery() {
         </div>
       </main>
 
-      <TicketSidebar
-        photos={allPhotos}
-        onImprimer={() => {
-          /* Issue #5: POST /jobs */
-        }}
-      />
+      <TicketSidebar photos={allPhotos} />
 
       {modalIndex !== null && (
         <PhotoModal
