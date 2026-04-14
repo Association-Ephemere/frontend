@@ -1,7 +1,13 @@
 import { useState, type ReactNode } from "react";
 import { TicketContext } from "./TicketProvider";
+import type { Ticket } from "@/types/ticket";
 
-type Ticket = Record<string, number>;
+const STORAGE_KEY = "ticketNumber";
+
+function readTicketNumber(): number {
+  const parsed = parseInt(localStorage.getItem(STORAGE_KEY) ?? "", 10);
+  return isNaN(parsed) ? 1 : parsed;
+}
 
 export interface TicketContextValue {
   ticket: Ticket;
@@ -9,12 +15,17 @@ export interface TicketContextValue {
   decrement: (key: string) => void;
   getQty: (key: string) => number;
   clear: () => void;
+  ticketNumber: number;
+  setTicketNumber: (n: number) => void;
+  incrementTicketNumber: () => void;
 }
 
 export function TicketProvider({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const [ticket, setTicket] = useState<Ticket>({});
+  const [ticketNumber, setTicketNumberState] =
+    useState<number>(readTicketNumber);
 
   function increment(key: string) {
     setTicket((t) => ({ ...t, [key]: (t[key] ?? 0) + 1 }));
@@ -40,9 +51,28 @@ export function TicketProvider({
     setTicket({});
   }
 
+  function setTicketNumber(n: number) {
+    const clamped = Math.max(1, n);
+    setTicketNumberState(clamped);
+    localStorage.setItem(STORAGE_KEY, String(clamped));
+  }
+
+  function incrementTicketNumber() {
+    setTicketNumber(ticketNumber + 1);
+  }
+
   return (
     <TicketContext.Provider
-      value={{ ticket, increment, decrement, getQty, clear }}
+      value={{
+        ticket,
+        increment,
+        decrement,
+        getQty,
+        clear,
+        ticketNumber,
+        setTicketNumber,
+        incrementTicketNumber,
+      }}
     >
       {children}
     </TicketContext.Provider>

@@ -1,22 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../lib/axios";
-
-export type JobStatus = "printing" | "requeued" | "queued" | "error" | "done";
-
-export interface Job {
-  id: string;
-  status: JobStatus;
-  total: number;
-  printed: number;
-  retryCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface JobsResponse {
-  jobs: Job[];
-  total: number;
-}
+import type { JobsResponse } from "@/types/job";
 
 export function useJobs(page: number, limit: number) {
   const offset = page * limit;

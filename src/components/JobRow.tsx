@@ -1,4 +1,4 @@
-import { type Job, type JobStatus } from "../hooks/useJobs";
+import type { Job, JobStatus } from "@/types/job";
 
 const STATUS_LABEL: Record<JobStatus, string> = {
   printing: "Impression",
@@ -23,7 +23,6 @@ interface Props {
 }
 
 export default function JobRow({ job, onRelancer, relancerPending }: Props) {
-  const shortId = job.id.slice(0, 8) + "…";
   const date = new Date(job.createdAt).toLocaleString("fr-FR", {
     day: "2-digit",
     month: "2-digit",
@@ -36,7 +35,9 @@ export default function JobRow({ job, onRelancer, relancerPending }: Props) {
 
   return (
     <tr className="border-b border-stone-100 hover:bg-stone-50 transition-colors">
-      <td className="px-4 py-3 font-mono text-xs text-stone-500">{shortId}</td>
+      <td className="px-4 py-3 font-mono text-xs text-stone-500">
+        {job.ticketNumber}
+      </td>
 
       <td className="px-4 py-3">
         <span

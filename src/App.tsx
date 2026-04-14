@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Gallery from "./pages/Gallery";
 import Jobs from "./pages/Jobs";
 import { Toaster } from "./components/ui/sonner";
+import Parameters from "./pages/Parameters";
 
 const queryClient = new QueryClient();
 
@@ -13,12 +14,13 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TicketProvider>
         <BrowserRouter>
-          <Toaster position="bottom-left" richColors />
-          <div className="min-h-screen bg-stone-50 text-stone-900">
+          <div className="min-h-screen bg-stone-50 text-stone-900 dark">
+            <Toaster position="bottom-left" richColors />
             <NavBar />
             <Routes>
               <Route path="/" element={<Gallery />} />
               <Route path="/jobs" element={<Jobs />} />
+              <Route path="/parameters" element={<Parameters />} />
             </Routes>
           </div>
         </BrowserRouter>

@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { type Job } from "./useJobs";
-import { getEnv } from "../lib/axios";
 
-interface SSEEvent {
-  jobId: string;
-  status: string;
-  printed: number;
-  total: number;
-  error?: string;
-}
+import { getEnv } from "../lib/axios";
+import type { Job, JobSSEEvent } from "@/types/job";
 
 export type JobOverrides = Record<string, Partial<Job>>;
 
@@ -37,7 +30,7 @@ export function useJobSSE(printingIds: string[]) {
 
       es.onmessage = (e) => {
         try {
-          const event: SSEEvent = JSON.parse(e.data);
+          const event: JobSSEEvent = JSON.parse(e.data);
           setOverrides((prev) => ({
             ...prev,
             [id]: {

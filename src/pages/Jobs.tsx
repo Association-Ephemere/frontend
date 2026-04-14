@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
-import { useJobs, type Job } from "../hooks/useJobs";
+import { useJobs } from "../hooks/useJobs";
 import { useJobSSE } from "../hooks/useJobSSE";
 import { useRelancer } from "../hooks/useRelancer";
 import JobRow from "../components/JobRow";
+import type { Job } from "@/types/job";
 
 const LIMIT_OPTIONS = [10, 25, 50];
 
