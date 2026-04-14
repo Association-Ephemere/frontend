@@ -1,12 +1,22 @@
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { TicketContext } from "./TicketProvider";
 import type { Ticket } from "@/types/ticket";
 
 const STORAGE_KEY = "ticketNumber";
+const TICKET_STORAGE_KEY = "ticket";
 
 function readTicketNumber(): number {
   const parsed = parseInt(localStorage.getItem(STORAGE_KEY) ?? "", 10);
   return isNaN(parsed) ? 1 : parsed;
+}
+
+function readTicket(): Ticket {
+  try {
+    const stored = localStorage.getItem(TICKET_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
 }
 
 export interface TicketContextValue {
@@ -23,9 +33,13 @@ export interface TicketContextValue {
 export function TicketProvider({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const [ticket, setTicket] = useState<Ticket>({});
+  const [ticket, setTicket] = useState<Ticket>(readTicket);
   const [ticketNumber, setTicketNumberState] =
     useState<number>(readTicketNumber);
+
+  useEffect(() => {
+    localStorage.setItem(TICKET_STORAGE_KEY, JSON.stringify(ticket));
+  }, [ticket]);
 
   function increment(key: string) {
     setTicket((t) => ({ ...t, [key]: (t[key] ?? 0) + 1 }));
@@ -48,7 +62,7 @@ export function TicketProvider({
   }
 
   function clear() {
-    setTicket({});
+    localStorage.removeItem(TICKET_STORAGE_KEY); // optional but clean
   }
 
   function setTicketNumber(n: number) {
