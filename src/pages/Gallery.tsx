@@ -69,16 +69,6 @@ export default function Gallery() {
     );
   }
 
-  if (status === "pending") {
-    return (
-      <div className="flex items-center justify-center h-[calc(100vh-48px)]">
-        <span className="text-stone-400 text-sm animate-pulse">
-          Chargement…
-        </span>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-[calc(100vh-48px)]">
       <main className="flex-1 overflow-y-auto p-4">
