@@ -61,7 +61,7 @@ export default function Gallery() {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-48px)]">
         <p className="text-red-500">
-          Une erreur est surb-venue lors du chargement des photos
+          Une erreur est survenue lors du chargement des photos
         </p>
       </div>
     );
