@@ -16,14 +16,14 @@ export default function Parameters() {
   }
 
   return (
-    <main className="p-6 max-w-md mx-auto">
+    <main className="p-6 p-x-12">
       <h1 className="text-xl font-semibold text-stone-800 mb-6">Paramètres</h1>
 
-      <div className="border border-stone-200 rounded-xl p-4 bg-white gap-4 flex flex-col">
-        <label className="block text-sm font-medium text-stone-700 mb-1">
+      <div className="border border-muted rounded-xl p-4 gap-4 flex flex-col w-full items-start">
+        <label className="text-sm font-medium text-foreground">
           Numéro de ticket actuel
         </label>
-        <p className="text-xs text-stone-400 mb-3">
+        <p className="text-xs text-muted-foreground text-left">
           S'incrémente automatiquement après chaque impression. Modifiez-le lors
           d'un changement de carnet.
         </p>
@@ -36,13 +36,13 @@ export default function Parameters() {
               setInput(e.target.value);
               setSaved(false);
             }}
-            className="w-full px-3 py-2 border border-stone-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-stone-300"
+            className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 shrink"
           />
           <button
             onClick={handleSave}
-            className="px-4 py-2 rounded-lg bg-stone-900 text-white text-sm hover:bg-stone-700 transition-colors"
+            className="px-4 py-2 rounded-lg text-sm bg-foreground text-background hover:bg-muted-foreground transition-colors"
           >
-            {saved ? "Enregistré ✓" : "Enregistrer"}
+            {saved ? "Enregistré" : "Enregistrer"}
           </button>
         </div>
       </div>
