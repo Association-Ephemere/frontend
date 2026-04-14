@@ -10,7 +10,7 @@ interface JobResponse {
 }
 
 export function useSubmitJob() {
-  const { ticket, clear } = useTicket();
+  const { ticket, clear, ticketNumber, incrementTicketNumber } = useTicket();
   const [isPending, setIsPending] = useState(false);
 
   async function submit() {
@@ -24,9 +24,13 @@ export function useSubmitJob() {
     if (photos.length === 0) return;
     setIsPending(true);
     try {
-      const { data } = await api.post<JobResponse>("/jobs", { photos });
+      await api.post<JobResponse>("/jobs", {
+        photos,
+        ticketNumber,
+      });
       clear();
-      toast.success(`Ticket #${data.jobId} envoyé à l'impression`);
+      toast.success(`Ticket #${ticketNumber} envoyé à l'impression`);
+      incrementTicketNumber();
     } catch {
       toast.error("Erreur lors de l'envoi du ticket. Réessayez.");
     } finally {

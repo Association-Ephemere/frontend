@@ -1,17 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { api } from "../lib/axios";
-import { type Job } from "./useJobs";
-
-interface JobDetail extends Job {
-  photos: { photoStorageKey: string; copies: number }[];
-}
-
-interface PostJobResponse {
-  jobId: string;
-  status: string;
-  createdAt: string;
-}
+import type { Job, JobDetail, PostJobResponse } from "@/types/job";
 
 export function useRelancer(
   onNewJob: (oldId: string, newJob: Job) => void,
@@ -34,6 +24,7 @@ export function useRelancer(
         retryCount: detail.retryCount + 1,
         createdAt: created.createdAt,
         updatedAt: created.createdAt,
+        ticketNumber: detail.ticketNumber,
       };
       onNewJob(oldId, newJob);
       onNewPrintingId(created.jobId);

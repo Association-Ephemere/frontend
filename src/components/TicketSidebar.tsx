@@ -14,7 +14,7 @@ function filenameFromKey(key: string): string {
 }
 
 export default function TicketSidebar({ photos }: Readonly<Props>) {
-  const { ticket, clear } = useTicket();
+  const { ticket, clear, ticketNumber } = useTicket();
   const { submit, isPending } = useSubmitJob();
 
   const selectedEntries = Object.entries(ticket).filter(([, qty]) => qty > 0);
@@ -29,7 +29,7 @@ export default function TicketSidebar({ photos }: Readonly<Props>) {
       {/* Header */}
       <div className="px-4 py-3 border-b border-stone-200">
         <p className="text-xs text-stone-400 uppercase tracking-wide font-medium mb-0.5">
-          Ticket
+          {`Ticket #${ticketNumber}`}
         </p>
         {isEmpty ? (
           <p className="text-sm text-stone-400">Aucune photo sélectionnée</p>
@@ -84,16 +84,13 @@ export default function TicketSidebar({ photos }: Readonly<Props>) {
       </div>
 
       {/* Actions */}
-      <div className="px-3 py-3 border-t border-stone-200 space-y-2">
-        <button className="w-full py-2 px-4 rounded-lg text-sm font-medium border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors">
-          Paramètres
-        </button>
+      <div className="px-3 py-3 border-t border-stone-200 space-y-3">
         <button
           onClick={submit}
           disabled={isEmpty || isPending}
           className="w-full py-2 px-4 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          {isPending ? "Envoi…" : "Imprimer"}
+          {isPending ? "Envoi…" : `Imprimer #${ticketNumber}`}
         </button>
         <button
           onClick={clear}
