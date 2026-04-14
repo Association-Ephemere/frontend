@@ -9,11 +9,11 @@ const STATUS_LABEL: Record<JobStatus, string> = {
 };
 
 const STATUS_CLASS: Record<JobStatus, string> = {
-  printing: "bg-blue-100 text-blue-800",
-  requeued: "bg-orange-100 text-orange-800",
-  queued: "bg-stone-100 text-stone-600",
-  error: "bg-red-100 text-red-800",
-  done: "bg-green-100 text-green-800",
+  printing: "bg-blue-900 text-blue-100",
+  requeued: "bg-orange-900 text-orange-100",
+  queued: "bg-stone-900 text-stone-600",
+  error: "bg-red-900 text-red-100",
+  done: "bg-green-900 text-green-100",
 };
 
 interface Props {
@@ -34,7 +34,7 @@ export default function JobRow({ job, onRelancer, relancerPending }: Props) {
     job.total > 0 ? Math.round((job.printed / job.total) * 100) : 0;
 
   return (
-    <tr className="border-b border-stone-100 hover:bg-stone-50 transition-colors">
+    <tr className="border-b border-muted-background hover:bg-stone-800 transition-colors">
       <td className="px-4 py-3 font-mono text-xs text-stone-500">
         {job.ticketNumber}
       </td>
@@ -55,31 +55,27 @@ export default function JobRow({ job, onRelancer, relancerPending }: Props) {
         {date}
       </td>
 
-      <td className="px-4 py-3 w-40">
-        {/* {job.status === "printing" && ( */}
-        <div className="space-y-1">
-          <div className="h-1.5 w-full bg-stone-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-500 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-xs text-stone-400 tabular-nums">
-            {job.printed} / {job.total}
-          </p>
-        </div>
-        {/* )} */}
-      </td>
-
-      <td className="px-4 py-3 text-right">
-        {job.status === "error" && (
+      <td className="px-4 py-3 ">
+        {job.status === "error" ? (
           <button
             onClick={() => onRelancer(job.id)}
             disabled={relancerPending}
-            className="text-xs px-3 py-1.5 rounded-lg border border-orange-300 text-orange-600 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-xs px-3 py-1.5 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             {relancerPending ? "…" : "Relancer"}
           </button>
+        ) : (
+          <div className="space-y-1">
+            <div className="h-1.5 w-full bg-stone-800  rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-xs text-stone-400 tabular-nums">
+              {job.printed} / {job.total}
+            </p>
+          </div>
         )}
       </td>
     </tr>

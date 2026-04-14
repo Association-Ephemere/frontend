@@ -61,12 +61,15 @@ export default function Jobs() {
 
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
 
+  const buttonClass = (isActive: boolean) =>
+    `${isActive ? "text-muted-background" : "border border-foreground text-foreground"} px-3 py-1.5 rounded-lg  hover:bg-muted-background disabled:opacity-40 disabled:cursor-not-allowed transition-colors`;
+
   return (
     <main className="p-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold text-stone-800">Impressions</h1>
+        <h1 className="text-xl font-semibold">Impressions</h1>
 
-        <div className="flex items-center gap-2 text-sm text-stone-500">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Par page :</span>
           {LIMIT_OPTIONS.map((n) => (
             <button
@@ -75,10 +78,10 @@ export default function Jobs() {
                 setLimit(n);
                 setPage(0);
               }}
-              className={`w-9 h-8 rounded-lg border text-sm transition-colors ${
+              className={`w-9 h-8 rounded-lg text-sm transition-colors ${
                 limit === n
-                  ? "border-stone-400 text-stone-800 bg-stone-100"
-                  : "border-stone-200 text-stone-500 hover:bg-stone-50"
+                  ? " text-stone-800 bg-stone-100"
+                  : " text-stone-500 hover:bg-stone-50"
               }`}
             >
               {n}
@@ -90,16 +93,13 @@ export default function Jobs() {
       {status === "pending" && (
         <div className="space-y-2">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-12 rounded-lg bg-stone-100 animate-pulse"
-            />
+            <div key={i} className="h-12 rounded-lg bg-muted animate-pulse" />
           ))}
         </div>
       )}
 
       {status === "error" && (
-        <p className="text-red-500 text-sm">
+        <p className="text-red-400 text-sm">
           Erreur lors du chargement des jobs.
         </p>
       )}
@@ -107,20 +107,19 @@ export default function Jobs() {
       {status === "success" && (
         <>
           {mergedJobs.length === 0 ? (
-            <p className="text-stone-400 text-sm mt-12 text-center">
+            <p className="text-muted-foreground text-sm mt-12 text-center">
               Aucun job pour l'instant.
             </p>
           ) : (
-            <div className="border border-stone-200 rounded-xl overflow-hidden">
+            <div className="border border-muted-background rounded-xl overflow-hidden">
               <table className="w-full">
-                <thead className="bg-stone-50 text-xs text-stone-400 uppercase tracking-wide">
+                <thead className="text-xs text-muted-foreground uppercase tracking-wide">
                   <tr>
                     <th className="px-4 py-3 font-medium">Ticket</th>
                     <th className="px-4 py-3 font-medium">Statut</th>
                     <th className="px-4 py-3 font-medium">Copies</th>
                     <th className="px-4 py-3 font-medium">Créé le</th>
                     <th className="px-4 py-3 font-medium">Progression</th>
-                    <th className="px-4 py-3" />
                   </tr>
                 </thead>
                 <tbody>
@@ -147,16 +146,16 @@ export default function Jobs() {
                 <button
                   onClick={() => setPage((p) => p - 1)}
                   disabled={page === 0}
-                  className="px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className={buttonClass(page === 0)}
                 >
-                  ← Précédent
+                  Précédent
                 </button>
                 <button
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page >= totalPages - 1}
-                  className="px-3 py-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className={buttonClass(page >= totalPages - 1)}
                 >
-                  Suivant →
+                  Suivant
                 </button>
               </div>
             </div>
