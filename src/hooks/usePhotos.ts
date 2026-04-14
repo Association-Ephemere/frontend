@@ -26,5 +26,6 @@ export function useInfinitePhotos() {
       const loaded = allPages.flatMap((p) => p.photos).length;
       return loaded < lastPage.total ? loaded : undefined;
     },
+    throwOnError: true,
   });
 }

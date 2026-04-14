@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { PhotosResponse } from "../hooks/usePhotos";
 import { mockFetchPhotos } from "../mocks/flickrAdapter";
+import { toast } from "sonner";
 
 declare global {
   interface Window {
@@ -13,7 +14,7 @@ function getEnv(key: string): string {
 }
 
 export const api = axios.create({
-  baseURL: getEnv("VITE_JOB_SERVICE_URL"),
+  baseURL: getEnv("VITE_JOB_SERVICE_URL") ?? "/",
 });
 
 export { getEnv };
@@ -29,8 +30,18 @@ export async function fetchPhotosCompat(
   if (USE_MOCK) {
     return mockFetchPhotos(offset, limit);
   }
+
   const { data } = await api.get<PhotosResponse>("/photos", {
     params: { limit, offset },
   });
+
+  if (!data?.photos) {
+    toast.info("Réponse du serveur invalide, vérifiez l'url de l'API");
+    return {
+      photos: [],
+      total: 0,
+    };
+  }
+
   return data;
 }

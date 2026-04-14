@@ -12,8 +12,8 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TicketProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <TicketProvider>
           <div className="min-h-scree dark">
             <Toaster position="bottom-left" richColors />
             <NavBar />
@@ -23,8 +23,8 @@ export default function App() {
               <Route path="/parameters" element={<Parameters />} />
             </Routes>
           </div>
-        </BrowserRouter>
-      </TicketProvider>
+        </TicketProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }

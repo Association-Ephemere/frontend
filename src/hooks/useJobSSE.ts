@@ -10,7 +10,7 @@ export function useJobSSE(printingIds: string[]) {
   const connections = useRef<Record<string, EventSource>>({});
 
   useEffect(() => {
-    const base = getEnv("VITE_JOB_SERVICE_URL");
+    const base = getEnv("VITE_JOB_SERVICE_URL") ?? "/";
     const activeIds = new Set(printingIds);
 
     // Close connections no longer needed

@@ -7,6 +7,7 @@ import { useTicket } from "../context/ticket/TicketProvider";
 
 function dedup(photos: Photo[]): Photo[] {
   const seen = new Set<string>();
+
   return photos.filter((p) => {
     if (seen.has(p.key)) return false;
     seen.add(p.key);
@@ -21,7 +22,8 @@ export default function Gallery() {
 
   const [topPhotos, setTopPhotos] = useState<Photo[]>([]);
   const scrollPages = data?.pages.flatMap((p) => p.photos) ?? [];
-  const allPhotos = dedup([...topPhotos, ...scrollPages]);
+
+  const allPhotos = dedup(topPhotos.concat(scrollPages) ?? []);
 
   const [modalIndex, setModalIndex] = useState<number | null>(null);
 
@@ -57,22 +59,12 @@ export default function Gallery() {
     [hasNextPage, isFetchingNextPage, fetchNextPage],
   );
 
-  if (status === "error") {
+  if (!data || status === "error") {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-48px)]">
         <p className="text-red-500">
           Une erreur est survenue lors du chargement des photos
         </p>
-      </div>
-    );
-  }
-
-  if (status === "pending") {
-    return (
-      <div className="flex items-center justify-center h-[calc(100vh-48px)]">
-        <span className="text-stone-400 text-sm animate-pulse">
-          Chargement…
-        </span>
       </div>
     );
   }
