@@ -1,12 +1,26 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { TicketContext } from "./TicketProvider";
 import type { Ticket } from "@/types/ticket";
+import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
-const STORAGE_KEY = "ticketNumber";
+const TICKET_NUMBER_STORAGE_KEY = "ticketNumber";
+const MAX_TICKET_BOOK_STORAGE_KEY = "maxTicketNumber";
 const TICKET_STORAGE_KEY = "ticket";
 
 function readTicketNumber(): number {
-  const parsed = parseInt(localStorage.getItem(STORAGE_KEY) ?? "", 10);
+  const parsed = parseInt(
+    localStorage.getItem(TICKET_NUMBER_STORAGE_KEY) ?? "",
+    10,
+  );
+  return isNaN(parsed) ? 1 : parsed;
+}
+
+function readMaxTicketBookNumber(): number {
+  const parsed = parseInt(
+    localStorage.getItem(MAX_TICKET_BOOK_STORAGE_KEY) ?? "",
+    10,
+  );
   return isNaN(parsed) ? 1 : parsed;
 }
 
@@ -28,6 +42,8 @@ export interface TicketContextValue {
   ticketNumber: number;
   setTicketNumber: (n: number) => void;
   incrementTicketNumber: () => void;
+  maxTicketNumber: number;
+  setMaxTicketNumber: (n: number) => void;
 }
 
 export function TicketProvider({
@@ -36,6 +52,11 @@ export function TicketProvider({
   const [ticket, setTicket] = useState<Ticket>(readTicket);
   const [ticketNumber, setTicketNumberState] =
     useState<number>(readTicketNumber);
+  const [maxTicketNumber, setMaxTicketNumberState] = useState<number>(
+    readMaxTicketBookNumber,
+  );
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem(TICKET_STORAGE_KEY, JSON.stringify(ticket));
@@ -68,11 +89,24 @@ export function TicketProvider({
   function setTicketNumber(n: number) {
     const clamped = Math.max(1, n);
     setTicketNumberState(clamped);
-    localStorage.setItem(STORAGE_KEY, String(clamped));
+    localStorage.setItem(TICKET_NUMBER_STORAGE_KEY, String(clamped));
+  }
+
+  function setMaxTicketNumber(n: number) {
+    const clamped = Math.max(1, n);
+    setMaxTicketNumberState(clamped);
+    localStorage.setItem(MAX_TICKET_BOOK_STORAGE_KEY, String(clamped));
   }
 
   function incrementTicketNumber() {
     setTicketNumber(ticketNumber + 1);
+    if (ticketNumber >= maxTicketNumber) {
+      toast.info(
+        "Vous avez utilisé le dernier ticket disponible, veuillez prendre un nouveau carnet et changer les paramètres.",
+      );
+
+      navigate("/parameters");
+    }
   }
 
   return (
@@ -86,6 +120,8 @@ export function TicketProvider({
         ticketNumber,
         setTicketNumber,
         incrementTicketNumber,
+        maxTicketNumber,
+        setMaxTicketNumber,
       }}
     >
       {children}
