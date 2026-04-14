@@ -2,19 +2,14 @@ import { useSubmitJob } from "@/hooks/useSumbitJob";
 import { useTicket } from "../context/ticket/TicketProvider";
 import { type Photo } from "../hooks/usePhotos";
 import { Button } from "./ui/button";
+import QuantityButtons from "./QuantityButtons";
 
 interface Props {
   photos: Photo[];
+  onClick: (index: number) => void;
 }
 
-function filenameFromKey(key: string): string {
-  // "low/stand-001-abc.jpg" -> "stand-001-abc.jpg"
-  const name = key.split("/").pop() ?? key;
-  // truncate if too long
-  return name.length > 24 ? name.slice(0, 21) + "…" : name;
-}
-
-export default function TicketSidebar({ photos }: Readonly<Props>) {
+export default function TicketSidebar({ photos, onClick }: Readonly<Props>) {
   const { ticket, clear, ticketNumber } = useTicket();
   const { submit, isPending } = useSubmitJob();
 
@@ -57,33 +52,30 @@ export default function TicketSidebar({ photos }: Readonly<Props>) {
             Aucune photo sélectionnée
           </div>
         ) : (
-          selectedEntries.map(([key, qty]) => {
+          selectedEntries.map(([key]) => {
             const photo = photoMap.get(key);
             return (
               <div
                 key={key}
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
+                className="flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors w-full"
               >
                 {/* Thumbnail */}
                 {photo ? (
                   <img
                     src={photo.url}
                     alt={key}
-                    className="w-10 h-10 rounded object-cover shrink-0 bg-stone-100"
+                    className="w-20 h-20 rounded object-cover shrink-0 bg-stone-100"
+                    onClick={() =>
+                      onClick(photos.findIndex((p) => p.key === key)!)
+                    }
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded bg-stone-100 shrink-0" />
+                  <div className="w-20 h-20 rounded bg-stone-100 shrink-0 animate-pulse" />
                 )}
 
-                {/* Filename */}
-                <span className="flex-1 text-xs text-stone-600 truncate">
-                  {filenameFromKey(key)}
-                </span>
-
-                {/* Qty badge */}
-                <span className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">
-                  {qty}
-                </span>
+                <div className="flex items-center justify-center w-full">
+                  <QuantityButtons displayQuantity photoKey={key} />
+                </div>
               </div>
             );
           })
