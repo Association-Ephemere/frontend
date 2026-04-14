@@ -109,7 +109,10 @@ export default function Gallery() {
         </div>
       </main>
 
-      <TicketSidebar photos={allPhotos} />
+      <TicketSidebar
+        photos={allPhotos}
+        onClick={(index: number) => setModalIndex(index)}
+      />
 
       {modalIndex !== null && (
         <PhotoModal

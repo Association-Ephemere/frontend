@@ -6,9 +6,10 @@ import QuantityButtons from "./QuantityButtons";
 
 interface Props {
   photos: Photo[];
+  onClick: (index: number) => void;
 }
 
-export default function TicketSidebar({ photos }: Readonly<Props>) {
+export default function TicketSidebar({ photos, onClick }: Readonly<Props>) {
   const { ticket, clear, ticketNumber } = useTicket();
   const { submit, isPending } = useSubmitJob();
 
@@ -64,6 +65,9 @@ export default function TicketSidebar({ photos }: Readonly<Props>) {
                     src={photo.url}
                     alt={key}
                     className="w-20 h-20 rounded object-cover shrink-0 bg-stone-100"
+                    onClick={() =>
+                      onClick(photos.findIndex((p) => p.key === key)!)
+                    }
                   />
                 ) : (
                   <div className="w-20 h-20 rounded bg-stone-100 shrink-0 animate-pulse" />
