@@ -27,7 +27,7 @@ export default function PhotoCard({ photo, qty, onClick }: Readonly<Props>) {
         </div>
       )}
 
-      <div className="absolute bottom-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="absolute bottom-2 right-2 flex items-center gap-1">
         <QuantityButtons displayQuantity={false} photoKey={photo.key} />
       </div>
     </div>
