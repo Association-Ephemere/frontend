@@ -1,5 +1,6 @@
 import type { Job, JobStatus } from "@/types/job";
 import JobPhotoPreview from "./JobPhotoPreview";
+import JobActions from "./JobActions";
 
 const STATUS_LABEL: Record<JobStatus, string> = {
   printing: "Impression",
@@ -63,36 +64,30 @@ export default function JobRow({
         </td>
 
         <td className="px-4 py-3">
-          {job.status === "error" ? (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRelancer(job.id);
-              }}
-              disabled={relancerPending}
-              className="text-xs px-3 py-1.5 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              {relancerPending ? "…" : "Relancer"}
-            </button>
-          ) : (
-            <div className="space-y-1">
-              <div className="h-1.5 w-full bg-stone-700 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-blue-500 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              <p className="text-xs text-stone-400 tabular-nums">
-                {job.printed} / {job.total}
-              </p>
+          <div className="space-y-1">
+            <div className="h-1.5 w-full bg-stone-700 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
             </div>
-          )}
+            <p className="text-xs text-stone-400 tabular-nums">
+              {job.printed} / {job.total}
+            </p>
+          </div>
         </td>
       </tr>
 
       <tr className="border-b border-stone-800 bg-stone-900">
-        <td colSpan={6}>
+        <td colSpan={4}>
           <JobPhotoPreview jobId={job.id} />
+        </td>
+        <td colSpan={2}>
+          <JobActions
+            job={job}
+            onRelancer={onRelancer}
+            relancerPending={relancerPending}
+          />
         </td>
       </tr>
     </>
