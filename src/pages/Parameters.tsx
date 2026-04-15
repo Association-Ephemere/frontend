@@ -10,10 +10,10 @@ export default function Parameters() {
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
-    const parsed = parseInt(input, 10);
-    const maxParsed = parseInt(inputMax, 10);
+    const parsed = Number.parseInt(input, 10);
+    const maxParsed = Number.parseInt(inputMax, 10);
 
-    if (isNaN(parsed) || isNaN(maxParsed)) {
+    if (Number.isNaN(parsed) || Number.isNaN(maxParsed)) {
       toast.error("Veuillez entrer des nombres valides pour les deux champs.");
       return;
     }
@@ -27,7 +27,7 @@ export default function Parameters() {
 
     setTicketNumber(parsed);
 
-    setMaxTicketNumber(parsed);
+    setMaxTicketNumber(maxParsed);
     setSaved(true);
     toast.success("Paramètres enregistrés avec succès !");
     setTimeout(() => setSaved(false), 2000);
