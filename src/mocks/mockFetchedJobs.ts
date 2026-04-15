@@ -73,5 +73,5 @@ export async function mockFetchedJobs(): Promise<JobsResponse> {
 export async function mockFetchedJobDetail(jobId: string): Promise<JobDetail> {
   // Simulate network latency
   await new Promise((r) => setTimeout(r, 300));
-  return detailedJobs.find((job) => job.id === jobId);
+  return detailedJobs.find((job) => job.id === jobId) ?? detailedJobs[0];
 }
