@@ -31,7 +31,7 @@ export default function JobPhotoPreview({
       {data.photos.map((p, i) => (
         <div key={`${p.photoStorageKey}-${i}`} className="relative">
           <img
-            src={p.photoStorageKey}
+            src={p.url}
             alt={`photo-${i}`}
             className="max-w-25 max-h-40 rounded object-contain bg-stone-700"
           />

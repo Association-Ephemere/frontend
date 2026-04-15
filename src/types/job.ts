@@ -17,7 +17,7 @@ export interface JobsResponse {
 }
 
 export interface JobDetail extends Job {
-  photos: { photoStorageKey: string; copies: number }[];
+  photos: { photoStorageKey: string; copies: number; url: string }[];
 }
 
 export interface PostJobResponse {
