@@ -16,18 +16,16 @@ export default function JobActions({
 
   return (
     <div className="flex gap-2 items-center justify-center">
-      {job.status === "error" && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onRelancer(job.id);
-          }}
-          disabled={relancerPending}
-          className="text-xs px-3 py-1.5 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          {relancerPending ? "…" : "Relancer"}
-        </button>
-      )}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onRelancer(job.id);
+        }}
+        disabled={relancerPending}
+        className="text-xs px-3 py-1.5 rounded-lg border border-orange-600 text-orange-600 hover:bg-orange-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+      >
+        {relancerPending ? "…" : "Relancer"}
+      </button>
 
       <button
         onClick={(e) => {
