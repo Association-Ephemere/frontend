@@ -1,5 +1,8 @@
 import type { JobDetail, JobsResponse } from "@/types/job";
 
+const PHOTO_URL =
+  "https://live.staticflickr.com/65535/55204653200_b136eb8c2f_c.jpg";
+
 const jobs: JobsResponse["jobs"] = [
   {
     id: "ss",
@@ -56,8 +59,12 @@ const jobs: JobsResponse["jobs"] = [
 const detailedJobs: JobDetail[] = jobs.map((job) => ({
   ...job,
   photos: [
-    { photoStorageKey: "low/mock-photo-001.jpg", copies: job.total - 1 },
-    { photoStorageKey: "low/mock-photo-002.jpg", copies: 1 },
+    {
+      photoStorageKey: "low/mock-photo-001.jpg",
+      copies: job.total - 1,
+      url: PHOTO_URL,
+    },
+    { photoStorageKey: "low/mock-photo-002.jpg", copies: 1, url: PHOTO_URL },
   ],
 }));
 
