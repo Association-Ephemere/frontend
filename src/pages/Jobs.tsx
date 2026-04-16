@@ -120,7 +120,6 @@ export default function Jobs() {
                   <tr>
                     <th className="px-4 py-3 font-medium">Ticket</th>
                     <th className="px-4 py-3 font-medium">Statut</th>
-                    <th className="px-4 py-3 font-medium">Copies</th>
                     <th className="px-4 py-3 font-medium">Créé le</th>
                     <th className="px-4 py-3 font-medium">Progression</th>
                   </tr>
