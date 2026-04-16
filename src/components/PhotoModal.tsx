@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import QuantityButtons from "./QuantityButtons";
 
 interface Props {
-  photos: Photo[];
+  photos: (Photo & { copies?: number })[];
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -81,9 +81,15 @@ export default function PhotoModal({
         className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg select-none"
       />
 
-      <div className="absolute bottom-[6vh] flex items-center mx-auto">
-        <QuantityButtons displayQuantity={true} photoKey={photo.key} />
-      </div>
+      {photo.copies !== undefined ? (
+        <div className="bg-blue-600 absolute bottom-[6vh] text-white font-bold rounded-full w-7 h-7  flex items-center justify-center shadow pointer-events-none">
+          {photo.copies}
+        </div>
+      ) : (
+        <div className="absolute bottom-[6vh] flex items-center mx-auto">
+          <QuantityButtons displayQuantity={true} photoKey={photo.key} />
+        </div>
+      )}
 
       {/* Next button */}
       {hasNext && (

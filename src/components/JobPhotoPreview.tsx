@@ -1,9 +1,12 @@
 import { useJob } from "@/hooks/useJob";
+import PhotoModal from "./PhotoModal";
+import { useState } from "react";
 
 export default function JobPhotoPreview({
   jobId,
 }: Readonly<{ jobId: string }>) {
   const { data, isPending, isError } = useJob(jobId);
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
 
   if (isPending) {
     return (
@@ -11,7 +14,7 @@ export default function JobPhotoPreview({
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="w-16 h-16 rounded bg-stone-700 animate-pulse"
+            className="w-25 h-40 rounded bg-stone-700 animate-pulse"
           />
         ))}
       </div>
@@ -29,7 +32,11 @@ export default function JobPhotoPreview({
   return (
     <div className="flex flex-wrap gap-2 p-3">
       {data.photos.map((p, i) => (
-        <div key={`${p.photoStorageKey}-${i}`} className="relative">
+        <div
+          key={`${p.photoStorageKey}-${i}`}
+          className="relative cursor-pointer"
+          onClick={() => setModalIndex(i)}
+        >
           <img
             src={p.url}
             alt={`photo-${i}`}
@@ -40,6 +47,18 @@ export default function JobPhotoPreview({
           </div>
         </div>
       ))}
+      {modalIndex !== null && (
+        <PhotoModal
+          photos={data.photos.map((p) => ({
+            url: p.url,
+            key: p.photoStorageKey,
+            copies: p.copies,
+          }))}
+          currentIndex={modalIndex}
+          onClose={() => setModalIndex(null)}
+          onNavigate={setModalIndex}
+        />
+      )}
     </div>
   );
 }
