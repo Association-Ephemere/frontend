@@ -14,7 +14,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <TicketProvider>
-          <div className="min-h-scree dark">
+          <div className="min-h-screen dark">
             <Toaster position="bottom-left" richColors />
             <NavBar />
             <Routes>

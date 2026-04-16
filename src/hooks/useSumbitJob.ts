@@ -10,7 +10,13 @@ interface JobResponse {
 }
 
 export function useSubmitJob() {
-  const { ticket, clear, ticketNumber, incrementTicketNumber } = useTicket();
+  const {
+    ticket,
+    clear,
+    ticketNumber,
+    maxTicketNumber,
+    incrementTicketNumber,
+  } = useTicket();
   const [isPending, setIsPending] = useState(false);
 
   async function submit() {
@@ -21,7 +27,20 @@ export function useSubmitJob() {
         copies,
       }));
 
-    if (photos.length === 0) return;
+    if (photos.length === 0) {
+      toast.error(
+        "Votre ticket est vide. Ajoutez des photos avant de soumettre.",
+      );
+      return;
+    }
+
+    if (ticketNumber > maxTicketNumber) {
+      toast.error(
+        "Le numéro de ticket actuel dépasse le numéro de ticket max. Veuillez ajuster les paramètres avant de soumettre.",
+      );
+      return;
+    }
+
     setIsPending(true);
     try {
       await api.post<JobResponse>("/jobs", {

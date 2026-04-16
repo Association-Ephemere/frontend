@@ -40,9 +40,12 @@ export default function Jobs() {
 
   // Merge SSE overrides into jobs display
   const mergedJobs: Job[] = useMemo(() => {
-    return jobs.map((j) =>
-      sseOverrides[j.id] ? { ...j, ...sseOverrides[j.id] } : j,
-    );
+    return jobs
+      .map((j) => (sseOverrides[j.id] ? { ...j, ...sseOverrides[j.id] } : j))
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
   }, [jobs, sseOverrides]);
 
   function handleNewJob(oldId: string, newJob: Job) {

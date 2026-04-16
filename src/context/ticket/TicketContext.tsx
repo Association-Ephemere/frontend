@@ -9,19 +9,19 @@ const MAX_TICKET_BOOK_STORAGE_KEY = "maxTicketNumber";
 const TICKET_STORAGE_KEY = "ticket";
 
 function readTicketNumber(): number {
-  const parsed = parseInt(
+  const parsed = Number.parseInt(
     localStorage.getItem(TICKET_NUMBER_STORAGE_KEY) ?? "",
     10,
   );
-  return isNaN(parsed) ? 1 : parsed;
+  return Number.isNaN(parsed) ? 1 : parsed;
 }
 
 function readMaxTicketBookNumber(): number {
-  const parsed = parseInt(
+  const parsed = Number.parseInt(
     localStorage.getItem(MAX_TICKET_BOOK_STORAGE_KEY) ?? "",
     10,
   );
-  return isNaN(parsed) ? 1 : parsed;
+  return Number.isNaN(parsed) ? 1 : parsed;
 }
 
 function readTicket(): Ticket {
@@ -50,9 +50,8 @@ export function TicketProvider({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const [ticket, setTicket] = useState<Ticket>(readTicket);
-  const [ticketNumber, setTicketNumberState] =
-    useState<number>(readTicketNumber);
-  const [maxTicketNumber, setMaxTicketNumberState] = useState<number>(
+  const [ticketNumber, setTicketNumber] = useState<number>(readTicketNumber);
+  const [maxTicketNumber, setMaxTicketNumber] = useState<number>(
     readMaxTicketBookNumber,
   );
 
@@ -84,28 +83,31 @@ export function TicketProvider({
 
   function clear() {
     localStorage.removeItem(TICKET_STORAGE_KEY); // optional but clean
+    setTicket({});
   }
 
-  function setTicketNumber(n: number) {
+  function setTicketNumberValue(n: number) {
     const clamped = Math.max(1, n);
-    setTicketNumberState(clamped);
+    setTicketNumber(clamped);
     localStorage.setItem(TICKET_NUMBER_STORAGE_KEY, String(clamped));
   }
 
-  function setMaxTicketNumber(n: number) {
+  function setMaxTicketNumberValue(n: number) {
     const clamped = Math.max(1, n);
-    setMaxTicketNumberState(clamped);
+    setMaxTicketNumber(clamped);
     localStorage.setItem(MAX_TICKET_BOOK_STORAGE_KEY, String(clamped));
   }
 
   function incrementTicketNumber() {
-    setTicketNumber(ticketNumber + 1);
+    setTicketNumberValue(ticketNumber + 1);
     if (ticketNumber >= maxTicketNumber) {
-      toast.info(
-        "Vous avez utilisé le dernier ticket disponible, veuillez prendre un nouveau carnet et changer les paramètres.",
-      );
+      setTimeout(() => {
+        toast.info(
+          "Vous avez utilisé le dernier ticket disponible, veuillez prendre un nouveau carnet et changer les paramètres.",
+        );
 
-      navigate("/parameters");
+        navigate("/parameters");
+      }, 2000);
     }
   }
 
@@ -121,7 +123,7 @@ export function TicketProvider({
         setTicketNumber,
         incrementTicketNumber,
         maxTicketNumber,
-        setMaxTicketNumber,
+        setMaxTicketNumber: setMaxTicketNumberValue,
       }}
     >
       {children}
