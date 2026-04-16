@@ -8,6 +8,8 @@ export default function JobPhotoPreview({
   const { data, isPending, isError } = useJob(jobId);
   const [modalIndex, setModalIndex] = useState<number | null>(null);
 
+  const total = data?.photos.reduce((sum, p) => sum + p.copies, 0) || 0;
+
   if (isPending) {
     return (
       <div className="flex gap-2 p-3">
@@ -40,13 +42,14 @@ export default function JobPhotoPreview({
           <img
             src={p.url}
             alt={`photo-${i}`}
-            className="max-w-25 max-h-40 rounded object-contain bg-stone-700"
+            className="max-w-60 h-40 rounded object-contain bg-stone-700"
           />
           <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-md pointer-events-none">
             {p.copies}
           </div>
         </div>
       ))}
+      <p>{`${total} photos`}</p>
       {modalIndex !== null && (
         <PhotoModal
           photos={data.photos.map((p) => ({

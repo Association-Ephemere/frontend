@@ -55,10 +55,6 @@ export default function JobRow({
           </span>
         </td>
 
-        <td className="px-4 py-3 text-sm text-stone-400 tabular-nums">
-          {job.total}
-        </td>
-
         <td className="px-4 py-3 text-xs text-stone-400 whitespace-nowrap">
           {date}
         </td>
@@ -79,7 +75,7 @@ export default function JobRow({
       </tr>
 
       <tr className="border-b border-stone-800 bg-stone-900">
-        <td colSpan={4}>
+        <td colSpan={3}>
           <JobPhotoPreview jobId={job.id} />
         </td>
         <td colSpan={2}>
